@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8" NAME="viewport" content="width=device-width, maximum-scale=1,user-scalable=0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>	
+	<title>○○ゲーム</title>
+	<style>
+	h1 {
+		font-size:48px;
+		color: #444;
+		font-family: 'Helvetica-Light' 'Meiryo' sans-serif;
+		text-align: center;	
+	}
+	h2 {
+		font-size:36px;
+		color: #444;
+		font-family: 'Helvetica-Light' 'Meiryo' sans-serif;
+		text-align: center;	
+	}	
+	div {
+		text-align: center;
+	}
+	#correct {
+		font-size: 1.4em;
+		color: #eaff00;
+		font-weight: bold;
+		margin: 50px;
+		padding: 10px 30px;
+		border-style: none;
+		box-shadow: 2px 2px 3px 1px #666;
+		-moz-box-shadow: 2px 2px 3px 1px #666;
+		-webkit-box-shadow: 2px 2px 3px 1px #666;
+		text-shadow: 1px 1px 2px #000;
+		background: -moz-linear-gradient(bottom, #fda611 0%, #f7d00a 50%, #f1b40d 100%);
+		background: -webkit-gradient(linear, left bottom, left top, from(#e7ba06), color-stop(0.5, #f0bb0e), to(#d8930b));
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+	}
+	
+	#pass {
+		font-size: 1.4em;
+		color: blue;
+		font-weight: bold;
+		margin: 50px;
+		padding: 10px 30px;
+		border-style: none;
+		box-shadow: 2px 2px 3px 1px #666;
+		-moz-box-shadow: 2px 2px 3px 1px #666;
+		-webkit-box-shadow: 2px 2px 3px 1px #666;
+		text-shadow: 1px 1px 2px #000;
+		background: -moz-linear-gradient(bottom, #36d, #248 50%, #36d);
+		background: -webkit-gradient(linear, left bottom, left top, from(#36d), color-stop(0.5, #248), to(#36d));
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+	}	
+	div button:hover {
+		opacity: 0.8;
+		cursor: pointer;
+	}
+	#genre {
+	}
+
+	</style>
+</head>
+<body>
+	<h1>単語当てゲーム!</h1>
+	<h2 id="genre">ジャンル：</h2>
+	<h2><div id="text_q"></div></h2>
+	<div>
+		<button id="correct">正解！！</button>
+		<button id="pass">パスする</buton>
+	</div>
+	<p id="result">正解数</p>
+	<p id="skip">パス数</p>
+	
+	<script>
+	$(function() {
+		//初期設定
+		var correctCount = 0,
+			passCount = 0,
+			quizCount = 0,	//問題番号
+			genre = ["???", "職業", "伝統", "アニメタイトル", "アイドル"],
+			q = new Array();
+	
+			//???！
+			q[0] = ["牧本孝之(スタッフの名前)ーフルネームで2点",1];
+			q[1] = ["稲田俊(スタッフの名前)ーフルネームで2点",2];
+			q[2] = ["西仲幸太(スタッフの名前)ーフルネームで2点",3];
+			q[3] = ["国吉ひかり(スタッフの名前)ーフルネームで2点",4];
+			q[4] = ["小谷広美(スタッフの名前)ーフルネームで2点",5];
+			q[5] = ["堀内彩瑛(スタッフの名前)ーフルネームで2点",6];
+			q[6] = ["中川彰(スタッフの名前)ーフルネームで2点",7];
+			q[7] = ["討論(ディベートでも可)",8];
+			q[8] = ["若者言葉(スラングでも可)",9];
+			q[9] = ["劇or演劇",10];
+			q[10] = ["古今東西ゲーム",11];
+			q[11] = ["しりとり",12];
+			q[12] = ["絵しりとり",13];
+			q[13] = ["伝言",14];
+			q[14] = ["南中ソーラン節",15];
+			q[15] = ["金八先生",16];
+			q[16] = ["俳句",17];
+			q[17] = ["季語",18];
+			q[18] = ["大阪",19];
+			q[19] = ["方言",20];
+			q[20] = ["上を向いて歩こう(スキヤキでも可)",21];
+			q[21] = ["川柳",22];
+			q[22] = ["校舎(こうしゃ)",23];
+			q[23] = ["校庭(こうてい)",24];
+			q[24] = ["iPhone",25];
+			q[25] = ["Samsung",26];
+			q[26] = ["竜巻(たつまき)",27];
+			q[27] = ["リュックサック",28];
+			q[28] = ["サラリーマン",29];
+			q[29] = ["段ボール",30];
+			q[30] = ["バラエティ番組",31];
+			
+			
+			//職業！			
+			q[31] = ["歌手",32];
+			q[32] = ["教師",33];
+			q[33] = ["ボクサー",34];
+			q[34] = ["関取(相撲取り)",35];
+			q[35] = ["消防士",36];
+			q[36] = ["大工",37];
+			q[37] = ["モデル",38];
+			q[38] = ["DJ",39];
+			q[39] = ["映画監督",40];
+			q[40] = ["警察",41];
+			q[41] = ["医者(看護婦）",42];
+
+			
+			//伝統！
+			q[42] = ["着物(きもの)",43];
+			q[43] = ["鯉のぼり(こいのぼり)",44];
+			q[44] = ["ひな祭り",45];
+			q[45] = ["歌舞伎(かぶき)",46];
+			q[46] = ["七五三",47];
+			q[47] = ["浴衣",48];
+			q[48] = ["畳（たたみ）",49];
+			q[49] = ["刀（かたな）",50];
+			q[50] = ["祭（まつり）",51];
+			q[51] = ["茶道（さどう）",52];
+			q[52] = ["華道（かどう）",53];
+			q[53] = ["書道（しょどう）",54];
+			q[54] = ["俳句・川柳（短歌）",55];
+			q[55] = ["能（のう）",56];
+			q[56] = ["ゴールデンウィーク",57];
+			q[57] = ["節分（豆まき）",58];
+			q[58] = ["文化祭",59];
+			q[59] = ["体育祭",60];
+			
+			//アニメタイトル！
+			q[60] = ["ドラゴンボール",61];
+			q[61] = ["ポケモン",62];
+			q[62] = ["名探偵コナン",63];
+			q[63] = ["スラムダンク",64];
+			q[64] = ["ワンピース",65];
+			q[65] = ["ナルト",66];
+			q[66] = ["それいけ！アンパンマン",67];
+			q[67] = ["デジモン",68];
+			q[68] = ["鉄腕アトム",69];
+			q[69] = ["となりのトトロ",70];
+			q[70] = ["風の谷のナウシカ",71];
+			q[71] = ["タッチ",72];
+			q[72] = ["進撃の巨人",73];
+			q[73] = ["コード・ギアス",74];
+			
+			//アイドル！！
+			q[74] = ["AKB48",75];
+			q[75] = ["モーニング娘。",76];
+			q[76] = ["ももいろクローバーZ",77];
+			q[77] = ["嵐",78];
+			q[78] = ["平成ジャンプ",79];
+			q[79] = ["きゃりーぱみゅぱみゅ",80];
+			q[80] = ["Perfume",81];
+			q[81] = ["SMAP",82];
+			q[82] = ["Scandal",83];
+			q[83] = ["おニャン子クラブ",84];
+			q[84] = ["関ジャニ∞",85];
+		
+			$('#correct').bind('touchstart', function() {
+				quiz();	
+			    event.preventDefault();                     // ページが動いたり、反応を止める（A タグなど）
+				correctCount++;
+				$('#result').text("正解数：" + correctCount + "問");
+			});			
+		
+			$('#pass').bind('touchstart', function() {
+				quiz();		
+			    event.preventDefault();                     // ページが動いたり、反応を止める（A タグなど）
+				passCount++;
+				$('#skip').text("パス数：" + passCount + "問");			
+			});			
+		
+			$('#correct').click(function() {
+				quiz();	
+				correctCount++;
+				$('#result').text("正解数：" + correctCount + "問");
+			});
+			
+			$('#pass').click(function() {	
+				quiz();
+				passCount++;
+				$('#skip').text("パス数：" + passCount + "問");		
+			});
+						
+			
+			function quiz() {
+				if (q[quizCount][1] < 32) {
+					$("#genre").text("ジャンル：" + genre[0]);
+				} else if (q[quizCount][1] < 43) {
+					$("#genre").text("ジャンル：" + genre[1]);
+				} else if (q[quizCount][1] < 61) {
+					$("#genre").text("ジャンル：" + genre[2]);
+				} else if (q[quizCount][1] < 75) {
+					$("#genre").text("ジャンル：" + genre[3]);
+				} else {
+					$("#genre").text("ジャンル：" + genre[4]);
+				}
+				
+				
+				$("#text_q").text((quizCount + 1) + "問目：" + q[quizCount][0]);
+				quizCount++;
+			}
+			
+			function shuffle(a){
+			    var i = a.length;
+			    while(i){
+			        var j = Math.floor(Math.random()*i);
+			        var t = a[--i];
+			        a[i] = a[j];
+			        a[j] = t;
+			    }
+			    return a;
+			}
+			
+			shuffle(q);
+			quiz();
+			
+	});
+			
+	</script>
+	
+	
+<!--
+	<script>	
+/*
+	(function() {
+		//初期設定
+		var correctCount = 0,
+			passCount = 0,
+			quizCount = 0,	//問題番号
+//			genre = new Array(),
+			q = new Array();
+			
+			
+		
+		q[0] = ["秋葉原",1];
+		q[1] = ["スカイツリー",2];
+		q[2] = ["歌舞伎町",3];
+		q[3] = ["お台場",4];
+		q[4] = ["沖縄",5];
+		q[5] = ["金閣寺",6];
+		q[6] = ["琵琶湖",7];
+		q[7] = ["通天閣",8];
+		q[8] = ["東京タワー",9];
+		q[9] = ["北海道",10];
+		q[10] = ["東京ディズニーランド",11];
+		q[11] = ["清水寺",12];
+		q[12] = ["浅草寺",13];
+		q[13] = ["USJ",14];
+		q[14] = ["原爆ドーム",15];
+		q[15] = ["原宿",16];
+		q[16] = ["大阪城",17];
+		q[17] = ["厳島神社",18];
+		q[18] = ["海遊館",19];
+		q[19] = ["靖国神社",20];
+		q[20] = ["屋久島",21];
+		q[21] = ["白神山地",22];
+		q[22] = ["忠犬ハチ公",23];
+		q[23] = ["寿司",24];
+
+		q[24] = ["焼き鳥",25];
+		q[25] = ["お好み焼き",26];
+		q[26] = ["たこ焼き",27];
+		q[27] = ["納豆",28];
+		q[28] = ["豆腐",29];
+		q[29] = ["うなぎ",30];
+		q[30] = ["わかめ",31];
+		q[31] = ["ラーメン",32];
+		q[32] = ["年越しそば",33];
+		q[33] = ["餅（もち）",34];
+		q[34] = ["みそ汁",35];
+		q[35] = ["すき焼き",36];
+		q[36] = ["唐揚げ",37];
+		q[37] = ["おにぎり",38];
+		q[38] = ["おまんじゅう",39];
+		q[39] = ["豆乳",40];
+		q[40] = ["",41];
+		q[41] = ["",42];
+		q[42] = ["",43];
+		q[43] = ["",44];
+		q[44] = ["",45];
+		q[45] = ["",46];
+		q[46] = ["",47];
+		q[47] = ["",48];
+		q[48] = ["",49];
+		q[49] = ["",50];
+		q[50] = ["",51];
+		q[51] = ["",52];
+		q[52] = ["",53];
+		q[53] = ["",54];
+		q[54] = ["",55];
+		q[55] = ["",56];
+		q[56] = ["",57];
+		q[57] = ["",58];
+		q[58] = ["",59];
+		q[59] = ["",60];
+		q[60] = ["",61];
+		
+		document.getElementById('correct').onclick = function() {
+			correctCount++;
+			document.getElementById('result').innerHTML = "正解数：" + correctCount + "問";
+			quiz();	
+		}	
+		
+/*
+		var correct = document.getElementById('correct');
+		correct.addEventListener('touchstart', function(e) {
+			correctCount++;
+			document.getElementById('result').innerHTML = "正解数：" + correctCount + "問";
+			quiz();	
+			}
+		})
+*/
+		
+		
+		
+		document.getElementById('pass').onclick = function() {	
+			passCount++;
+			document.getElementById('skip').innerHTML = "パス数：" + passCount + "問";
+		
+			quiz();
+		}
+		
+/*
+		var pass = document.getElementById('pass');
+		pass.addEventListener('touchstart', function(e) {
+			passCount++;
+			document.getElementById('skip').innerHTML = "パス数：" + passCount + "問";
+		
+			quiz();		
+		})
+*/		
+		
+		
+		function quiz() {
+//			document.getElementById("").innerHTML = "ジャンル：" + genre;
+			document.getElementById("text_q").innerHTML = (quizCount + 1) + "問目：" + q[quizCount][0];
+			quizCount++;
+		}
+
+		if(quizCount < q.length) {
+			quiz();
+		} else {
+			document.writeln("Finish!!!!");
+		}
+		
+	})();	
+*/
+	</script>
+-->
+</body>
+</html>

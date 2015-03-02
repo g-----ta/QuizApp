@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8" NAME="viewport" content="width=device-width, maximum-scale=1,user-scalable=0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>	
+	<title>ジェスチャーゲーム</title>
+	<style>
+	h1 {
+		font-size:48px;
+		color: #444;
+		font-family: 'Helvetica-Light' 'Meiryo' sans-serif;
+		text-align: center;	
+	}
+	h2 {
+		font-size:36px;
+		color: #444;
+		font-family: 'Helvetica-Light' 'Meiryo' sans-serif;
+		text-align: center;	
+	}	
+	div {
+		text-align: center;
+	}
+	#correct {
+		font-size: 1.4em;
+		color: #eaff00;
+		font-weight: bold;
+		margin: 50px;
+		padding: 10px 30px;
+		border-style: none;
+		box-shadow: 2px 2px 3px 1px #666;
+		-moz-box-shadow: 2px 2px 3px 1px #666;
+		-webkit-box-shadow: 2px 2px 3px 1px #666;
+		text-shadow: 1px 1px 2px #000;
+		background: -moz-linear-gradient(bottom, #fda611 0%, #f7d00a 50%, #f1b40d 100%);
+		background: -webkit-gradient(linear, left bottom, left top, from(#e7ba06), color-stop(0.5, #f0bb0e), to(#d8930b));
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+	}
+	
+	#pass {
+		font-size: 1.4em;
+		color: blue;
+		font-weight: bold;
+		margin: 50px;
+		padding: 10px 30px;
+		border-style: none;
+		box-shadow: 2px 2px 3px 1px #666;
+		-moz-box-shadow: 2px 2px 3px 1px #666;
+		-webkit-box-shadow: 2px 2px 3px 1px #666;
+		text-shadow: 1px 1px 2px #000;
+		background: -moz-linear-gradient(bottom, #36d, #248 50%, #36d);
+		background: -webkit-gradient(linear, left bottom, left top, from(#36d), color-stop(0.5, #248), to(#36d));
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+	}	
+	div button:hover {
+		opacity: 0.8;
+		cursor: pointer;
+	}
+	#genre {
+	}
+
+	</style>
+</head>
+<body>
+	<h1>ジェスチャーゲーム!</h1>
+	<h2 id="genre">ジャンル：</h2>
+	<h2><div id="text_q"></div></h2>
+	<div>
+		<button id="correct">正解！！</button>
+		<button id="pass">パスする</buton>
+	</div>
+	<p id="result">正解数</p>
+	<p id="skip">パス数</p>
+	
+	<script>
+	$(function() {
+		//初期設定
+		var correctCount = 0,
+			passCount = 0,
+			quizCount = 0,	//問題番号
+			genre = ["物", "スポーツ選手", "動物", "アニメキャラ", "昔の日本の職業","職業"],
+			q = new Array();
+	
+			//物
+			q[0] = ["飛行機",1];
+			q[1] = ["噴水",2];
+			q[2] = ["扇風機",3];
+			q[3] = ["芝刈り機",4];
+			q[4] = ["時計",5];
+			q[5] = ["ホッチキス",6];
+			q[6] = ["はさみ",7];
+			q[7] = ["シャワー",8];
+			q[8] = ["歯ブラシ",9];
+			q[9] = ["車",10];
+			q[10] = ["電車",11];
+			q[11] = ["携帯",12];
+			q[12] = ["本",13];
+			q[13] = ["皿",14];
+			
+			//スポーツ選手
+			q[14] = ["ボルト選手(陸上）",15];
+			q[15] = ["錦織圭(テニス)",16];
+			q[16] = ["福原愛（卓球）",17];
+			q[17] = ["浅田真央(フィギュアスケート)",18];
+			q[18] = ["タイガーウッズ(ゴルフ）",19];
+			
+			//動物
+			q[19] = ["カエル",20];
+			q[20] = ["ゴリラ",21];
+			q[21] = ["うさぎ",22];
+			q[22] = ["ゾウ",23];
+			q[23] = ["カンガルー",24];
+			q[24] = ["猿",25];
+			q[25] = ["ライオン",26];
+			q[26] = ["馬",27];
+			q[27] = ["キリン",28];
+			q[28] = ["イノシシ",29];
+			q[29] = ["魚",30];
+			
+			//アニメキャラ
+			q[30] = ["ドラえもん",31];
+			q[31] = ["仮面ライダー",32];
+			q[32] = ["(愛犬)パトラッシュ",33];
+			q[33] = ["(アルプスの少女)ハイジ",34];
+			q[34] = ["セーラームーン",35];
+			q[35] = ["トトロ",36];
+			q[36] = ["カオナシ",37];
+			q[37] = ["ミッキーマウス",38];
+			q[38] = ["(はちみつ）プーさん",39];
+			q[39] = ["トム（or ジェリー）",40];
+			
+			//昔の日本の職業	
+			q[40] = ["サムライ",41];
+			q[41] = ["忍者",42];
+			
+			//職業
+			q[42] = ["やくざ",43];
+			q[43] = ["医者(看護婦）",44];
+			q[44] = ["警察",45];
+			q[45] = ["映画監督",46];
+			q[46] = ["DJ",47];
+			q[47] = ["モデル",48];
+			q[48] = ["大工",49];
+			q[49] = ["消防士",50];
+			q[50] = ["歌手",51];
+			q[51] = ["教師",52];
+			q[52] = ["ボクサー",53];
+			q[53] = ["関取(相撲取り)",54];
+		
+			$('#correct').bind('touchstart', function() {
+				quiz();	
+			    event.preventDefault();                     // ページが動いたり、反応を止める（A タグなど）
+				correctCount++;
+				$('#result').text("正解数：" + correctCount + "問");
+			});			
+		
+			$('#pass').bind('touchstart', function() {
+				quiz();		
+			    event.preventDefault();                     // ページが動いたり、反応を止める（A タグなど）
+				passCount++;
+				$('#skip').text("パス数：" + passCount + "問");			
+			});			
+		
+			$('#correct').click(function() {
+				quiz();	
+				correctCount++;
+				$('#result').text("正解数：" + correctCount + "問");
+			});
+			
+			$('#pass').click(function() {	
+				quiz();
+				passCount++;
+				$('#skip').text("パス数：" + passCount + "問");		
+			});
+						
+			
+			function quiz() {
+				if (q[quizCount][1] < 15) {
+					$("#genre").text("ジャンル：" + genre[0]);
+				} else if (q[quizCount][1] < 20) {
+					$("#genre").text("ジャンル：" + genre[1]);
+				} else if (q[quizCount][1] < 31) {
+					$("#genre").text("ジャンル：" + genre[2]);
+				} else if (q[quizCount][1] < 41) {
+					$("#genre").text("ジャンル：" + genre[3]);
+				} else if (q[quizCount][1] < 43) {
+					$("#genre").text("ジャンル：" + genre[4]);
+				} else {
+					$("#genre").text("ジャンル：" + genre[5]);
+				}
+				
+				
+				$("#text_q").text((quizCount + 1) + "問目：" + q[quizCount][0]);
+				quizCount++;
+			}
+			
+			function shuffle(a){
+			    var i = a.length;
+			    while(i){
+			        var j = Math.floor(Math.random()*i);
+			        var t = a[--i];
+			        a[i] = a[j];
+			        a[j] = t;
+			    }
+			    return a;
+			}
+			
+			shuffle(q);
+			quiz();
+			
+	});
+			
+	</script>
+	
+</body>
+</html>
